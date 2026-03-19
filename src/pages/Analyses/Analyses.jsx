@@ -2,19 +2,25 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { analysisService } from "../../services/api";
 import ScoreRing from "../../components/ScoreRing";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Analyses() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
 
+  const athleteFilter = user?.role === "amateur" ? user?.athleteId : undefined;
+
   useEffect(() => {
-    analysisService.getAll({ status: filter }).then((r) => {
-      setData(r.data);
-      setLoading(false);
-    });
-  }, [filter]);
+    analysisService
+      .getAll({ status: filter, athleteId: athleteFilter })
+      .then((r) => {
+        setData(r.data);
+        setLoading(false);
+      });
+  }, [filter, athleteFilter]);
 
   const avgScore = data
     .filter((a) => a.status === "done")
@@ -24,10 +30,13 @@ export default function Analyses() {
     <div className="fade-in-up">
       <div className="page-heading d-flex justify-content-between align-items-start flex-wrap gap-3">
         <div>
-          <h1>Análises IA</h1>
+          <h1>
+            {user?.role === "amateur" ? "Minhas Análises IA" : "Análises IA"}
+          </h1>
           <p>
-            Resultados de avaliação de postura, técnica e biomecânica dos
-            atletas
+            {user?.role === "amateur"
+              ? "Resultados da sua avaliação de postura, técnica e biomecânica"
+              : "Resultados de avaliação de postura, técnica e biomecânica dos atletas"}
           </p>
         </div>
         <button className="btn-at-primary" onClick={() => navigate("/upload")}>

@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { analysisService } from "../../services/api";
 import ScoreRing from "../../components/ScoreRing";
+import { useAuth } from "../../context/AuthContext";
 
 export default function AnalysisDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -13,11 +15,18 @@ export default function AnalysisDetail() {
     analysisService
       .getById(id)
       .then((d) => {
+        if (
+          user?.role === "amateur" &&
+          Number(user?.athleteId) !== Number(d.athleteId)
+        ) {
+          navigate("/analises", { replace: true });
+          return;
+        }
         setData(d);
         setLoading(false);
       })
       .catch(() => navigate("/analises"));
-  }, [id]);
+  }, [id, navigate, user?.athleteId, user?.role]);
 
   if (loading)
     return (

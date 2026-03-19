@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { notificationService } from "../../services/api";
 import { useTheme } from "../../context/ThemeContext";
+import { useAuth } from "../../context/AuthContext";
 
 const TITLES = {
   "/dashboard": "Dashboard",
@@ -9,13 +10,17 @@ const TITLES = {
   "/sessoes": "Sessões",
   "/analises": "Análises IA",
   "/upload": "Nova Análise",
+  "/planos": "Planos",
 };
 
-export default function Topbar() {
+export default function Topbar({ onOpenSidebar }) {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const { theme, isDark, toggleTheme } = useTheme();
+  const { user, logout } = useAuth();
   const [notifications, setNotifications] = useState([]);
   const [showNotif, setShowNotif] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   const title =
     Object.entries(TITLES).find(([k]) => pathname.startsWith(k))?.[1] ||
@@ -36,7 +41,17 @@ export default function Topbar() {
 
   return (
     <header className="topbar">
-      <div className="topbar-title">{title}</div>
+      <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
+        <button
+          className="btn-icon mobile-menu-btn"
+          onClick={onOpenSidebar}
+          aria-label="Abrir menu"
+          title="Abrir menu"
+        >
+          <i className="bi bi-list" />
+        </button>
+        <div className="topbar-title">{title}</div>
+      </div>
 
       <div className="topbar-actions">
         <button
@@ -85,6 +100,7 @@ export default function Topbar() {
                 onClick={() => setShowNotif(false)}
               />
               <div
+                className="notif-dropdown"
                 style={{
                   position: "absolute",
                   right: 0,
@@ -178,11 +194,14 @@ export default function Topbar() {
         {/* User Avatar */}
         <div
           style={{
+            position: "relative",
             display: "flex",
             alignItems: "center",
             gap: "0.6rem",
             marginLeft: "0.25rem",
+            cursor: "pointer",
           }}
+          onClick={() => setShowUserMenu(!showUserMenu)}
         >
           <div
             className="avatar"
@@ -191,7 +210,7 @@ export default function Topbar() {
                 "linear-gradient(135deg, var(--at-secondary), var(--at-accent))",
             }}
           >
-            AD
+            {user?.name?.charAt(0).toUpperCase()}
           </div>
           <div style={{ lineHeight: 1.2 }}>
             <div
@@ -201,12 +220,99 @@ export default function Topbar() {
                 color: "var(--at-heading)",
               }}
             >
-              Admin
+              {user?.name || "Admin"}
             </div>
             <div style={{ fontSize: "0.68rem", color: "var(--at-muted)" }}>
               Gestor
             </div>
           </div>
+
+          {/* User Menu Dropdown */}
+          {showUserMenu && (
+            <>
+              <div
+                style={{ position: "fixed", inset: 0, zIndex: 199 }}
+                onClick={() => setShowUserMenu(false)}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  top: "110%",
+                  minWidth: 220,
+                  background: "var(--at-card)",
+                  border: "1px solid var(--at-border)",
+                  borderRadius: 12,
+                  overflow: "hidden",
+                  zIndex: 200,
+                  boxShadow:
+                    theme === "dark"
+                      ? "0 20px 40px rgba(0,0,0,0.5)"
+                      : "0 20px 40px rgba(15, 23, 42, 0.12)",
+                }}
+              >
+                <div
+                  style={{
+                    padding: "0.9rem 1.2rem",
+                    borderBottom: "1px solid var(--at-border)",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "var(--at-muted)",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.08em",
+                      marginBottom: "0.3rem",
+                    }}
+                  >
+                    Conectado como
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "0.9rem",
+                      fontWeight: 600,
+                      color: "var(--at-heading)",
+                    }}
+                  >
+                    {user?.email}
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    logout();
+                    navigate("/login");
+                  }}
+                  style={{
+                    width: "100%",
+                    padding: "0.75rem 1.2rem",
+                    background: "none",
+                    border: "none",
+                    textAlign: "left",
+                    cursor: "pointer",
+                    fontSize: "0.9rem",
+                    color: "var(--at-text)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.6rem",
+                    transition: "all 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = "var(--at-primary-dim)";
+                    e.target.style.color = "var(--at-primary)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = "none";
+                    e.target.style.color = "var(--at-text)";
+                  }}
+                >
+                  <i className="bi bi-box-arrow-right" />
+                  Sair
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </header>

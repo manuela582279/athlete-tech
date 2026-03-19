@@ -52,6 +52,40 @@ export default function Dashboard() {
   const [sessions, setSessions] = useState([]);
   const [analyses, setAnalyses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [slideIndex, setSlideIndex] = useState(0);
+
+  const trainingGameSlides = [
+    {
+      period: "Últimos 7 dias",
+      treinoCount: 38,
+      jogoCount: 12,
+      treinoAvg: 86,
+      jogoAvg: 82,
+      labels: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"],
+      treinoSeries: [5, 6, 4, 7, 5, 6, 5],
+      jogoSeries: [1, 2, 1, 2, 2, 2, 2],
+    },
+    {
+      period: "Últimas 4 semanas",
+      treinoCount: 146,
+      jogoCount: 44,
+      treinoAvg: 87,
+      jogoAvg: 84,
+      labels: ["S1", "S2", "S3", "S4"],
+      treinoSeries: [32, 35, 38, 41],
+      jogoSeries: [9, 10, 12, 13],
+    },
+    {
+      period: "Temporada atual",
+      treinoCount: 612,
+      jogoCount: 198,
+      treinoAvg: 88,
+      jogoAvg: 85,
+      labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"],
+      treinoSeries: [86, 92, 97, 103, 112, 122],
+      jogoSeries: [24, 27, 29, 34, 39, 45],
+    },
+  ];
 
   useEffect(() => {
     Promise.all([
@@ -136,6 +170,40 @@ export default function Dashboard() {
     return <span className={`at-badge ${cls}`}>{label}</span>;
   };
 
+  const activeSlide = trainingGameSlides[slideIndex];
+  const trainingGameChartData = {
+    labels: activeSlide.labels,
+    datasets: [
+      {
+        label: "Treinos",
+        data: activeSlide.treinoSeries,
+        borderColor: "#00e5ff",
+        backgroundColor: "rgba(0,229,255,0.16)",
+        tension: 0.35,
+        fill: true,
+        pointRadius: 3,
+      },
+      {
+        label: "Jogos",
+        data: activeSlide.jogoSeries,
+        borderColor: "#ff6b35",
+        backgroundColor: "rgba(255,107,53,0.14)",
+        tension: 0.35,
+        fill: true,
+        pointRadius: 3,
+      },
+    ],
+  };
+
+  const changeSlide = (direction) => {
+    setSlideIndex((prev) => {
+      if (direction === "prev") {
+        return prev === 0 ? trainingGameSlides.length - 1 : prev - 1;
+      }
+      return prev === trainingGameSlides.length - 1 ? 0 : prev + 1;
+    });
+  };
+
   return (
     <div className="fade-in-up">
       <div className="page-heading">
@@ -198,6 +266,75 @@ export default function Dashboard() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Training x Games Stats (Fake) */}
+      <div className="at-card mb-4">
+        <div className="at-card-header">
+          <h3 className="at-card-title">
+            Sessões de Treino x Jogos — {activeSlide.period}
+          </h3>
+          <div style={{ display: "flex", gap: "0.45rem" }}>
+            <button
+              className="btn-icon"
+              onClick={() => changeSlide("prev")}
+              aria-label="Período anterior"
+            >
+              <i className="bi bi-chevron-left" />
+            </button>
+            <button
+              className="btn-icon"
+              onClick={() => changeSlide("next")}
+              aria-label="Próximo período"
+            >
+              <i className="bi bi-chevron-right" />
+            </button>
+          </div>
+        </div>
+        <div className="at-card-body" style={{ display: "grid", gap: "1rem" }}>
+          <div className="row g-3">
+            <div className="col-6 col-lg-3">
+              <div className="stat-card primary" style={{ minHeight: 130 }}>
+                <div className="stat-value">{activeSlide.treinoCount}</div>
+                <div className="stat-label">Treinos</div>
+              </div>
+            </div>
+            <div className="col-6 col-lg-3">
+              <div className="stat-card secondary" style={{ minHeight: 130 }}>
+                <div className="stat-value">{activeSlide.jogoCount}</div>
+                <div className="stat-label">Jogos</div>
+              </div>
+            </div>
+            <div className="col-6 col-lg-3">
+              <div className="stat-card green" style={{ minHeight: 130 }}>
+                <div className="stat-value">{activeSlide.treinoAvg}</div>
+                <div className="stat-label">Score médio treino</div>
+              </div>
+            </div>
+            <div className="col-6 col-lg-3">
+              <div className="stat-card purple" style={{ minHeight: 130 }}>
+                <div className="stat-value">{activeSlide.jogoAvg}</div>
+                <div className="stat-label">Score médio jogo</div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ height: 220 }}>
+            <Line
+              data={trainingGameChartData}
+              options={{
+                ...chartDefaults,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    display: true,
+                    labels: { color: "#64748b", font: { size: 11 } },
+                  },
+                },
+              }}
+            />
+          </div>
+        </div>
       </div>
 
       {/* Charts Row */}

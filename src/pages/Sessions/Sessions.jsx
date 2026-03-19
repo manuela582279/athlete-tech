@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { sessionService } from "../../services/api";
 import ScoreRing from "../../components/ScoreRing";
+import { useAuth } from "../../context/AuthContext";
 
 const STATUS = {
   done: ["success", "Concluída"],
@@ -11,23 +12,32 @@ const STATUS = {
 
 export default function Sessions() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
 
+  const athleteFilter = user?.role === "amateur" ? user?.athleteId : undefined;
+
   useEffect(() => {
-    sessionService.getAll({ status: filter }).then((r) => {
-      setSessions(r.data);
-      setLoading(false);
-    });
-  }, [filter]);
+    sessionService
+      .getAll({ status: filter, athleteId: athleteFilter })
+      .then((r) => {
+        setSessions(r.data);
+        setLoading(false);
+      });
+  }, [filter, athleteFilter]);
 
   return (
     <div className="fade-in-up">
       <div className="page-heading d-flex justify-content-between align-items-start flex-wrap gap-3">
         <div>
           <h1>Sessões</h1>
-          <p>Histórico e agenda de treinos com análise IA integrada</p>
+          <p>
+            {user?.role === "amateur"
+              ? "Seu histórico e agenda de treinos"
+              : "Histórico e agenda de treinos com análise IA integrada"}
+          </p>
         </div>
         <button className="btn-at-primary">
           <i className="bi bi-plus-lg" /> Agendar Sessão
@@ -177,7 +187,10 @@ export default function Sessions() {
                               color: "var(--at-heading)",
                               cursor: "pointer",
                             }}
-                            onClick={() => navigate(`/atletas/${s.athleteId}`)}
+                            onClick={() =>
+                              user?.role !== "amateur" &&
+                              navigate(`/atletas/${s.athleteId}`)
+                            }
                           >
                             {s.athleteName}
                           </span>

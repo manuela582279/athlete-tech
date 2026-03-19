@@ -1,5 +1,6 @@
 :root {
   --at-black: #0a0a0f;
+  --at-page-bg: linear-gradient(135deg, #062953 0%, #30617b 55%, #aaedee 100%);
   --at-dark: #111118;
   --at-card: #16161f;
   --at-border: #1e1e2e;
@@ -10,8 +11,8 @@
   --at-green: #00d68f;
   --at-red: #ff3860;
   --at-yellow: #ffd600;
-  --at-text: #e2e8f0;
-  --at-muted: #64748b;
+  --at-text: #ffffff;
+  --at-muted: #ffffff;
   --at-heading: #ffffff;
   --at-topbar-bg: rgba(10, 10, 15, 0.85);
   --at-shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.35);
@@ -22,6 +23,7 @@
 
 :root[data-theme="light"] {
   --at-black: #f3f6fb;
+  --at-page-bg: linear-gradient(135deg, #ffff 0%, #aaedee 100%);
   --at-dark: #ffffff;
   --at-card: #ffffff;
   --at-border: #dbe3ef;
@@ -47,7 +49,7 @@
 
 body {
   margin: 0;
-  background-color: var(--at-black);
+  background: var(--at-page-bg);
   color: var(--at-text);
   font-family: var(--font-body);
   font-weight: 400;
@@ -79,7 +81,7 @@ body {
   flex: 1;
   margin-left: var(--at-sidebar-w);
   min-height: 100vh;
-  background: var(--at-black);
+  background: var(--at-page-bg);
   transition: margin-left 0.3s ease;
 }
 
@@ -245,6 +247,19 @@ body {
 .btn-icon:hover {
   color: var(--at-text);
   border-color: var(--at-primary);
+}
+
+.mobile-menu-btn {
+  display: none;
+}
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 999;
 }
 
 /* ── Cards ── */
@@ -697,11 +712,35 @@ body {
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    z-index: 1000;
+  }
+  .sidebar.open {
+    transform: translateX(0);
   }
   .main-content {
     margin-left: 0;
   }
   .page-body {
     padding: 1rem;
+  }
+  .topbar {
+    padding: 0.8rem 1rem;
+  }
+  .topbar-title {
+    font-size: 1.15rem;
+  }
+  .mobile-menu-btn {
+    display: inline-flex;
+  }
+
+  .notif-dropdown {
+    position: fixed !important;
+    top: 64px !important;
+    left: 0.75rem !important;
+    right: 0.75rem !important;
+    width: auto !important;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
   }
 }
