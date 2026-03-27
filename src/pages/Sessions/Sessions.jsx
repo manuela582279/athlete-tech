@@ -16,8 +16,42 @@ export default function Sessions() {
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
+  const [showNewSessionForm, setShowNewSessionForm] = useState(false);
+  const [newSession, setNewSession] = useState({
+    date: "",
+    time: "",
+    duration: "",
+    sport: "",
+    type: "",
+    athleteId: user?.role === "amateur" ? user?.athleteId : "",
+  });
 
   const athleteFilter = user?.role === "amateur" ? user?.athleteId : undefined;
+
+  const handleSaveSession = async () => {
+    try {
+      await sessionService.create(newSession);
+      setShowNewSessionForm(false);
+      setNewSession({
+        date: "",
+        time: "",
+        duration: "",
+        sport: "",
+        type: "",
+        athleteId: user?.role === "amateur" ? user?.athleteId : "",
+      });
+      // Recarregar sessões
+      setLoading(true);
+      const r = await sessionService.getAll({
+        status: filter,
+        athleteId: athleteFilter,
+      });
+      setSessions(r.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Erro ao salvar sessão:", error);
+    }
+  };
 
   useEffect(() => {
     sessionService
@@ -39,10 +73,111 @@ export default function Sessions() {
               : "Histórico e agenda de treinos com análise IA integrada"}
           </p>
         </div>
-        <button className="btn-at-primary">
-          <i className="bi bi-plus-lg" /> Agendar Sessão
+        <button
+          className="btn-at-primary"
+          onClick={() => setShowNewSessionForm(true)}
+        >
+          <i className="bi bi-plus-lg" /> Nova Sessão
         </button>
       </div>
+
+      {showNewSessionForm && (
+        <div className="at-card mb-4">
+          <div className="at-card-header">
+            <h5>Cadastrar Nova Sessão</h5>
+            <button
+              className="btn-close"
+              onClick={() => setShowNewSessionForm(false)}
+            ></button>
+          </div>
+          <div className="at-card-body">
+            <div className="row g-3">
+              <div className="col-md-6">
+                <label className="form-label">Data</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  value={newSession.date}
+                  onChange={(e) =>
+                    setNewSession({ ...newSession, date: e.target.value })
+                  }
+                />
+              </div>
+              <div className="col-md-6">
+                <label className="form-label">Hora</label>
+                <input
+                  type="time"
+                  className="form-control"
+                  value={newSession.time}
+                  onChange={(e) =>
+                    setNewSession({ ...newSession, time: e.target.value })
+                  }
+                />
+              </div>
+              <div className="col-md-6">
+                <label className="form-label">Duração (min)</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={newSession.duration}
+                  onChange={(e) =>
+                    setNewSession({ ...newSession, duration: e.target.value })
+                  }
+                />
+              </div>
+              <div className="col-md-6">
+                <label className="form-label">Modalidade</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={newSession.sport}
+                  onChange={(e) =>
+                    setNewSession({ ...newSession, sport: e.target.value })
+                  }
+                />
+              </div>
+              <div className="col-md-6">
+                <label className="form-label">Tipo de Treino</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={newSession.type}
+                  onChange={(e) =>
+                    setNewSession({ ...newSession, type: e.target.value })
+                  }
+                />
+              </div>
+              {user?.role !== "amateur" && (
+                <div className="col-md-6">
+                  <label className="form-label">ID do Atleta</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={newSession.athleteId}
+                    onChange={(e) =>
+                      setNewSession({
+                        ...newSession,
+                        athleteId: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              )}
+            </div>
+            <div className="d-flex gap-2 mt-3">
+              <button className="btn-at-primary" onClick={handleSaveSession}>
+                Salvar Sessão
+              </button>
+              <button
+                className="btn-at-outline"
+                onClick={() => setShowNewSessionForm(false)}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Summary Cards */}
       <div className="row g-3 mb-4">

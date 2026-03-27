@@ -1,20 +1,33 @@
 export default function Plans() {
   const plans = [
     {
-      name: "Basic",
+      name: "Free",
       color: "var(--at-muted)",
+      price: "Gratuito",
+      description: "Para testar a plataforma e acompanhar performance básica.",
+      features: [
+        "Dashboard limitado",
+        "Até 3 análises/mês",
+        "Histórico de 30 dias",
+        "Suporte básico",
+      ],
+    },
+    {
+      name: "Basic",
+      color: "var(--at-primary)",
       price: "R$ 79/mês",
       description: "Ideal para começar o acompanhamento de performance.",
       features: [
         "Dashboard básico",
         "Até 20 sessões/mês",
         "Relatórios essenciais",
+        "Histórico completo",
         "Suporte por email",
       ],
     },
     {
       name: "Pro",
-      color: "var(--at-primary)",
+      color: "var(--at-secondary)",
       price: "R$ 189/mês",
       description: "Para times e atletas com rotina de análise contínua.",
       featured: true,
@@ -28,15 +41,17 @@ export default function Plans() {
     },
     {
       name: "Elite",
-      color: "var(--at-secondary)",
+      color: "var(--at-accent)",
       price: "R$ 349/mês",
-      description: "Performance máxima para alto rendimento.",
+      description:
+        "Performance máxima para academias, clubes e escolas esportivas.",
       features: [
         "Tudo do Pro",
         "Sessões ilimitadas",
         "Insights preditivos",
         "Acompanhamento dedicado",
         "SLA premium",
+        "Integração com sistemas externos",
       ],
     },
   ];
@@ -45,12 +60,12 @@ export default function Plans() {
     <div className="fade-in-up">
       <div className="page-heading">
         <h1>Planos</h1>
-        <p>Compare os planos Basic, Pro e Elite da plataforma.</p>
+        <p>Compare os planos Free, Basic, Pro e Elite da plataforma.</p>
       </div>
 
       <div className="row g-3">
         {plans.map((plan) => (
-          <div className="col-12 col-lg-4" key={plan.name}>
+          <div className="col-12 col-md-6 col-lg-3" key={plan.name}>
             <div
               className="at-card h-100"
               style={{

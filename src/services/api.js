@@ -554,6 +554,22 @@ export const sessionService = {
     return { data, total: data.length };
     // Real: return api.get('/sessions', { params })
   },
+  create: async (session) => {
+    await delay();
+    const newSession = {
+      ...session,
+      id: SESSIONS.length + 1,
+      status: "done", // Assumindo que é uma sessão que ocorreu
+      aiAnalysis: false,
+      score: null,
+      athleteName:
+        ATHLETES.find((a) => a.id === Number(session.athleteId))?.name ||
+        "Desconhecido",
+    };
+    SESSIONS.push(newSession);
+    return newSession;
+    // Real: return api.post('/sessions', session)
+  },
 };
 
 export const dashboardService = {

@@ -122,7 +122,8 @@ export default function RegisterProfessionalAthlete() {
         alignItems: "center",
         justifyContent: "center",
         minHeight: "100vh",
-        background: "var(--at-black)",
+        background:
+          "linear-gradient(180deg, #1a3a52 0%, #0f2745 50%, #0a0a0f 100%)",
         padding: "1rem",
       }}
     >

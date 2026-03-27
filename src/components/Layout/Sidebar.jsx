@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import logoImage from "../../assets/M.png";
+import logoImage from "../../assets/Atlhete-tech.png";
 
 const navItems = [
   {

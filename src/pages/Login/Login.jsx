@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import logoImage from "../../assets/M.png";
+import logoImage from "../../assets/Atlhete-tech.png";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -43,7 +43,8 @@ export default function Login() {
         alignItems: "center",
         justifyContent: "center",
         minHeight: "100vh",
-        background: "var(--at-black)",
+        background:
+          "linear-gradient(180deg, #1a3a52 0%, #0f2745 50%, #0a0a0f 100%)",
         padding: "1rem",
       }}
     >
