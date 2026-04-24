@@ -21,6 +21,17 @@ api.interceptors.request.use((config) => {
 // ─────────────────────────────────────────────
 const delay = (ms = 500) => new Promise((r) => setTimeout(r, ms));
 
+const getAthleteSubCategory = (age) => {
+  const athleteAge = Number(age);
+  if (!Number.isFinite(athleteAge) || athleteAge <= 0) return "Sub19";
+  if (athleteAge <= 13) return "Sub13";
+  if (athleteAge <= 15) return "Sub15";
+  if (athleteAge <= 17) return "Sub17";
+  if (athleteAge <= 19) return "Sub19";
+  if (athleteAge <= 21) return "Sub21";
+  return "Adulto";
+};
+
 const ATHLETES = [
   {
     id: 1,
@@ -409,6 +420,156 @@ const SESSIONS = [
   },
 ];
 
+const PHYSICAL_PREPARATION_SESSIONS = [
+  {
+    id: 1,
+    athleteId: 1,
+    athleteName: "Lucas Ferreira",
+    trainingType: "Força e potência",
+    gameType: "Jogo oficial",
+    effortLevel: 7,
+    date: "2025-07-15",
+  },
+  {
+    id: 2,
+    athleteId: 2,
+    athleteName: "Mariana Costa",
+    trainingType: "Resistência aeróbica",
+    gameType: "Competição regional",
+    effortLevel: 5,
+    date: "2025-07-14",
+  },
+  {
+    id: 3,
+    athleteId: 4,
+    athleteName: "Julia Mendes",
+    trainingType: "Velocidade e reação",
+    gameType: "Prova classificatória",
+    effortLevel: 10,
+    date: "2025-07-12",
+  },
+];
+
+const PHYSIO_MONITORING = [
+  {
+    id: 1,
+    specialty: "fisioterapia",
+    athleteId: 1,
+    athleteName: "Lucas Ferreira",
+    athleteSub: "Adulto",
+    athleteSport: "Futebol",
+    date: "2025-07-10",
+    time: "09:00",
+    treatment: "Fortalecimento de tornozelo esquerdo",
+    evolution: "Evolução boa, dor reduziu de 6 para 3.",
+    specialistName: "Dra. Camila Rocha",
+    hasMedicalAppointment: true,
+    doctorName: "Dr. Renato Alves",
+  },
+  {
+    id: 2,
+    specialty: "fisioterapia",
+    athleteId: 5,
+    athleteName: "Carlos Oliveira",
+    athleteSub: "Adulto",
+    athleteSport: "Vôlei",
+    date: "2025-07-12",
+    time: "14:30",
+    treatment: "Recuperação de sobrecarga em ombro",
+    evolution: "Mobilidade melhorou, manter protocolo por 2 semanas.",
+    specialistName: "Dr. Felipe Nunes",
+    hasMedicalAppointment: false,
+    doctorName: "",
+  },
+  {
+    id: 3,
+    specialty: "fisioterapia",
+    athleteId: 4,
+    athleteName: "Julia Mendes",
+    athleteSub: "Sub21",
+    athleteSport: "Atletismo",
+    date: "2025-07-15",
+    time: "11:15",
+    treatment: "Prevenção de lesão de posterior",
+    evolution: "Sem dor pós-treino. Liberada para treino intenso.",
+    specialistName: "Dra. Camila Rocha",
+    hasMedicalAppointment: true,
+    doctorName: "Dra. Fernanda Luz",
+  },
+  {
+    id: 4,
+    specialty: "nutricao",
+    athleteId: 2,
+    athleteName: "Mariana Costa",
+    athleteSub: "Sub19",
+    athleteSport: "Natação",
+    date: "2025-07-14",
+    time: "08:45",
+    treatment: "Ajuste de plano alimentar pré-competição",
+    evolution: "Melhora de energia em treino intervalado.",
+    specialistName: "Dra. Luiza Prado",
+    bodyMeasurements: "62kg, 19% gordura, IMC 22.0",
+    dietPlan: "Plano hipercalórico leve com foco em recuperação",
+    supplements: "Whey protein, ômega-3, creatina 3g",
+    recipePlan: "Panqueca proteica + shake pós-treino",
+    goals: "Aumentar massa magra em 1kg em 6 semanas",
+    measurementExams: "Bioimpedância quinzenal e dobras cutâneas",
+    hasMedicalAppointment: false,
+    doctorName: "",
+  },
+  {
+    id: 5,
+    specialty: "nutricao",
+    athleteId: 7,
+    athleteName: "Thiago Ramos",
+    athleteSub: "Adulto",
+    athleteSport: "MMA",
+    date: "2025-07-13",
+    time: "16:10",
+    treatment: "Controle de composição corporal",
+    evolution: "Redução de 1.2% de gordura em 3 semanas.",
+    specialistName: "Dr. Bruno Maia",
+    bodyMeasurements: "83kg, 12% gordura, IMC 27.1",
+    dietPlan: "Plano normocalórico com ajuste de carboidrato",
+    supplements: "Multivitamínico, magnésio, beta-alanina",
+    recipePlan: "Refeição pré-luta de baixo FODMAP",
+    goals: "Manter peso com melhora de performance anaeróbica",
+    measurementExams: "Hemograma e perfil hormonal mensal",
+    hasMedicalAppointment: true,
+    doctorName: "Dr. Renato Alves",
+  },
+  {
+    id: 6,
+    specialty: "psicologia",
+    athleteId: 1,
+    athleteName: "Lucas Ferreira",
+    athleteSub: "Adulto",
+    athleteSport: "Futebol",
+    date: "2025-07-11",
+    time: "17:00",
+    sessionName: "Sessão individual",
+    topic: "Gestão de ansiedade pré-jogo",
+    dynamics: "Respiração 4-7-8 e visualização guiada",
+    requestedByAthlete: false,
+    specialistName: "Dra. Carla Souza",
+  },
+  {
+    id: 7,
+    specialty: "psicologia",
+    athleteId: 4,
+    athleteName: "Julia Mendes",
+    athleteSub: "Sub21",
+    athleteSport: "Atletismo",
+    date: "2025-07-12",
+    time: "10:20",
+    sessionName: "Sessão pré-competição",
+    topic: "Concentração e autoconfiança",
+    dynamics: "Roteiro de foco e técnica de ancoragem",
+    requestedByAthlete: false,
+    specialistName: "Dr. André Nascimento",
+  },
+];
+
 const NOTIFICATIONS = [
   {
     id: 1,
@@ -569,6 +730,109 @@ export const sessionService = {
     SESSIONS.push(newSession);
     return newSession;
     // Real: return api.post('/sessions', session)
+  },
+};
+
+export const physicalPreparationService = {
+  getAll: async (params = {}) => {
+    await delay();
+    let data = [...PHYSICAL_PREPARATION_SESSIONS];
+    if (params.athleteId)
+      data = data.filter((s) => s.athleteId === Number(params.athleteId));
+    if (params.search)
+      data = data.filter(
+        (s) =>
+          s.athleteName.toLowerCase().includes(params.search.toLowerCase()) ||
+          s.trainingType.toLowerCase().includes(params.search.toLowerCase()) ||
+          s.gameType.toLowerCase().includes(params.search.toLowerCase()),
+      );
+    data.sort((a, b) =>
+      `${b.date}`.localeCompare(`${a.date}`, undefined, { numeric: true }),
+    );
+    return { data, total: data.length };
+  },
+
+  create: async (record) => {
+    await delay();
+    const athlete = ATHLETES.find((a) => a.id === Number(record.athleteId));
+    const newRecord = {
+      id: PHYSICAL_PREPARATION_SESSIONS.length + 1,
+      athleteId: Number(record.athleteId),
+      athleteName: athlete?.name || "Atleta não identificado",
+      trainingType: record.trainingType,
+      gameType: record.gameType,
+      effortLevel: Number(record.effortLevel),
+      date: record.date,
+    };
+    PHYSICAL_PREPARATION_SESSIONS.push(newRecord);
+    return newRecord;
+  },
+};
+
+export const physiotherapyService = {
+  getAll: async (params = {}) => {
+    await delay();
+    let data = [...PHYSIO_MONITORING];
+    if (params.specialty)
+      data = data.filter((r) => r.specialty === params.specialty);
+    if (params.athleteId)
+      data = data.filter((r) => r.athleteId === Number(params.athleteId));
+    if (params.search)
+      data = data.filter(
+        (r) =>
+          r.athleteName.toLowerCase().includes(params.search.toLowerCase()) ||
+          (r.athleteSub || "").toLowerCase().includes(params.search.toLowerCase()) ||
+          (r.athleteSport || "").toLowerCase().includes(params.search.toLowerCase()) ||
+          r.treatment.toLowerCase().includes(params.search.toLowerCase()) ||
+          r.evolution.toLowerCase().includes(params.search.toLowerCase()) ||
+          (r.sessionName || "").toLowerCase().includes(params.search.toLowerCase()) ||
+          (r.topic || "").toLowerCase().includes(params.search.toLowerCase()) ||
+          (r.dynamics || "").toLowerCase().includes(params.search.toLowerCase()) ||
+          r.specialistName.toLowerCase().includes(params.search.toLowerCase()) ||
+            (r.bodyMeasurements || "").toLowerCase().includes(params.search.toLowerCase()) ||
+            (r.dietPlan || "").toLowerCase().includes(params.search.toLowerCase()) ||
+            (r.supplements || "").toLowerCase().includes(params.search.toLowerCase()) ||
+            (r.recipePlan || "").toLowerCase().includes(params.search.toLowerCase()) ||
+            (r.goals || "").toLowerCase().includes(params.search.toLowerCase()) ||
+            (r.measurementExams || "").toLowerCase().includes(params.search.toLowerCase()) ||
+          (r.doctorName || "").toLowerCase().includes(params.search.toLowerCase()),
+      );
+    data.sort((a, b) =>
+      `${b.date}`.localeCompare(`${a.date}`, undefined, { numeric: true }),
+    );
+    return { data, total: data.length };
+  },
+
+  create: async (record) => {
+    await delay();
+    const athlete = ATHLETES.find((a) => a.id === Number(record.athleteId));
+    const newRecord = {
+      id: PHYSIO_MONITORING.length + 1,
+      specialty: record.specialty || "fisioterapia",
+      athleteId: Number(record.athleteId),
+      athleteName: athlete?.name || "Atleta não identificado",
+      athleteSub: record.athleteSub || getAthleteSubCategory(athlete?.age),
+      athleteSport: record.athleteSport || athlete?.sport || "Não informado",
+      date: record.date,
+      time: record.time,
+      treatment: record.treatment,
+      evolution: record.evolution,
+      sessionName: record.sessionName || "",
+      topic: record.topic || "",
+      dynamics: record.dynamics || "",
+      requestedByAthlete: !!record.requestedByAthlete,
+      specialistName: record.specialistName,
+      bodyMeasurements: record.bodyMeasurements || "",
+      dietPlan: record.dietPlan || "",
+      supplements: record.supplements || "",
+      recipePlan: record.recipePlan || "",
+      goals: record.goals || "",
+      measurementExams: record.measurementExams || "",
+      hasMedicalAppointment: !!record.hasMedicalAppointment,
+      doctorName: record.hasMedicalAppointment ? record.doctorName : "",
+    };
+    PHYSIO_MONITORING.push(newRecord);
+    return newRecord;
   },
 };
 

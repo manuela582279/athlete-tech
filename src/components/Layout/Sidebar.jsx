@@ -14,6 +14,21 @@ const navItems = [
     items: [
       { path: "/atletas", icon: "bi-person-lines-fill", label: "Atletas" },
       { path: "/sessoes", icon: "bi-calendar3", label: "Sessões" },
+      {
+        path: "/saude/fisioterapia",
+        icon: "bi-heart-pulse-fill",
+        label: "Fisioterapia",
+      },
+      {
+        path: "/saude/nutricao",
+        icon: "bi-egg-fried",
+        label: "Nutrição",
+      },
+      {
+        path: "/saude/psicologia",
+        icon: "bi-emoji-smile-fill",
+        label: "Psicologia",
+      },
     ],
   },
   {
@@ -39,7 +54,13 @@ export default function Sidebar({ isOpen = false, onClose = () => {} }) {
       ? navItems
           .map((section) => ({
             ...section,
-            items: section.items.filter((item) => item.path !== "/atletas"),
+            items: section.items.filter(
+              (item) =>
+                item.path !== "/atletas" &&
+                item.path !== "/saude/fisioterapia" &&
+                item.path !== "/saude/nutricao" &&
+                item.path !== "/saude/psicologia",
+            ),
           }))
           .filter((section) => section.items.length > 0)
       : user?.role === "professional-athlete"

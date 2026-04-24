@@ -12,6 +12,7 @@ export default function RegisterProfessional() {
     confirmPassword: "",
     gender: "",
     organization: "",
+    technicalRole: "",
     sport: "",
     phone: "",
   });
@@ -35,6 +36,7 @@ export default function RegisterProfessional() {
       confirmPassword,
       gender,
       organization,
+      technicalRole,
       sport,
     } = formData;
 
@@ -45,6 +47,7 @@ export default function RegisterProfessional() {
       !confirmPassword ||
       !gender ||
       !organization ||
+      !technicalRole ||
       !sport
     ) {
       setError("Preencha todos os campos obrigatórios");
@@ -73,6 +76,7 @@ export default function RegisterProfessional() {
         name,
         gender,
         organization,
+        position: technicalRole,
         sport,
       });
       navigate("/dashboard");
@@ -276,6 +280,37 @@ export default function RegisterProfessional() {
                   placeholder="Nome da organização"
                   disabled={loading}
                 />
+              </div>
+
+              {/* Sport */}
+              <div>
+                <label
+                  style={{
+                    fontSize: "0.75rem",
+                    color: "var(--at-muted)",
+                    fontWeight: 600,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                    marginBottom: "0.5rem",
+                    display: "block",
+                  }}
+                >
+                  Função na Gestão Técnica *
+                </label>
+                <select
+                  className="at-input"
+                  name="technicalRole"
+                  value={formData.technicalRole}
+                  onChange={handleChange}
+                  disabled={loading}
+                >
+                  <option value="">— Selecione uma função —</option>
+                  <option value="tecnico-principal">Técnico Principal</option>
+                  <option value="preparador-fisico">Preparador Físico</option>
+                  <option value="analista-desempenho">
+                    Analista de Desempenho
+                  </option>
+                </select>
               </div>
 
               {/* Sport */}
