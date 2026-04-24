@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
+import SupportButton from "../SupportChat/SupportButton";
 
 export default function Layout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -23,6 +24,8 @@ export default function Layout() {
           <Outlet />
         </div>
       </div>
+
+      <SupportButton />
     </div>
   );
 }

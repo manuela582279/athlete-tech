@@ -1,0 +1,55 @@
+.widget_container{
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.chat_wrapper{
+    width: 350px;
+    height: 500px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    margin-bottom: 15px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: slideIn 0.3s ease-out; /*efeitinho*/
+}
+
+.float_button{
+    display: flex;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    color: #ffffff;
+    background-color: #021436;
+    cursor: pointer;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(137, 148, 203, 0.4);
+    transition: transform 0.2s ease;
+}
+
+.float_button:hover{
+    transform: scale(1.1);
+}
+
+@keyframes slideIn {
+    form {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+/*responsividade*/
+@media (max-width: 400px) {
+  .chat_wrapper {
+    width: 90vw;
+    height: 70vh;
+    right: 5vw;
+  }
+}
