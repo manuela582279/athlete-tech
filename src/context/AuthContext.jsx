@@ -69,6 +69,7 @@ export function AuthProvider({ children }) {
             team: profile.team || null,
             position: profile.position || null,
             number: profile.number || null,
+            specialty: profile.specialty || null,
             createdAt: new Date().toISOString(),
           };
 
@@ -85,6 +86,7 @@ export function AuthProvider({ children }) {
             role: "professional",
             athleteId: makeAthleteId(email),
             gender: null,
+            specialty: null,
             createdAt: new Date().toISOString(),
           };
           saveAccounts([...accounts, account]);

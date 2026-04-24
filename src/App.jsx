@@ -6,6 +6,7 @@ import RegisterType from "./pages/RegisterType/RegisterType";
 import RegisterProfessional from "./pages/RegisterProfessional/RegisterProfessional";
 import RegisterProfessionalAthlete from "./pages/RegisterProfessionalAthlete/RegisterProfessionalAthlete";
 import RegisterAmateur from "./pages/RegisterAmateur/RegisterAmateur";
+import RegisterMedicalCommittee from "./pages/RegisterMedicalCommittee/RegisterMedicalCommittee";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import AmateurDashboard from "./pages/AmateurDashboard/AmateurDashboard";
 import ProfessionalAthleteDashboard from "./pages/ProfessionalAthleteDashboard/ProfessionalAthleteDashboard";
@@ -16,6 +17,9 @@ import AnalysisDetail from "./pages/Analyses/AnalysisDetail";
 import Sessions from "./pages/Sessions/Sessions";
 import UploadAnalysis from "./pages/UploadAnalysis/UploadAnalysis";
 import Plans from "./pages/Plans/Plans";
+import Fisioterapia from "./pages/SessoesMedicas/Fisioterapia";
+import Nutricao from "./pages/SessoesMedicas/Nutricao";
+import Psicologia from "./pages/SessoesMedicas/Psicologia";
 
 function ProtectedRoute({ element }) {
   const { isAuthenticated, loading } = useAuth();
@@ -68,6 +72,10 @@ export default function App() {
           element={<RegisterProfessionalAthlete />}
         />
         <Route path="/register/amateur" element={<RegisterAmateur />} />
+        <Route
+          path="/register/medical-committee"
+          element={<RegisterMedicalCommittee />}
+        />
         <Route path="/" element={<ProtectedRoute element={<Layout />} />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route
@@ -97,6 +105,37 @@ export default function App() {
           <Route path="analises" element={<Analyses />} />
           <Route path="analises/:id" element={<AnalysisDetail />} />
           <Route path="sessoes" element={<Sessions />} />
+          <Route
+            path="saude/fisioterapia"
+            element={
+              <RoleRoute
+                allow={["professional", "professional-athlete", "medical-committee"]}
+                element={<Fisioterapia />}
+              />
+            }
+          />
+          <Route
+            path="saude/nutricao"
+            element={
+              <RoleRoute
+                allow={["professional", "professional-athlete", "medical-committee"]}
+                element={<Nutricao />}
+              />
+            }
+          />
+          <Route
+            path="saude/psicologia"
+            element={
+              <RoleRoute
+                allow={["professional", "professional-athlete", "medical-committee"]}
+                element={<Psicologia />}
+              />
+            }
+          />
+          <Route
+            path="fisioterapia"
+            element={<Navigate to="/saude/fisioterapia" replace />}
+          />
           <Route path="planos" element={<Plans />} />
           <Route path="upload" element={<UploadAnalysis />} />
         </Route>

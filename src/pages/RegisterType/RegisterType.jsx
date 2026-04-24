@@ -46,6 +46,20 @@ export default function RegisterType() {
         "Comunidade de atletas",
       ],
     },
+    {
+      key: "medical-committee",
+      icon: "bi-heart-pulse-fill",
+      title: "Comissão Médica",
+      description:
+        "Para profissionais de saúde da equipe com foco em acompanhamento do atleta",
+      color: "var(--at-red)",
+      features: [
+        "Registro de atendimento por atleta",
+        "Acompanhamento de evolução",
+        "Controle de consulta médica",
+        "Visão integrada de tratamento",
+      ],
+    },
   ];
 
   return (
