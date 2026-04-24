@@ -54,6 +54,17 @@ export default function Topbar({ onOpenSidebar }) {
       </div>
 
       <div className="topbar-actions">
+        <a
+          className="btn-icon"
+          href="https://www.whatsapp.com/"
+          target="_blank"
+          rel="noreferrer"
+          title="WhatsApp"
+          aria-label="Abrir WhatsApp"
+        >
+          <i className="bi bi-whatsapp" style={{ color: "var(--at-green)" }} />
+        </a>
+
         <button
           className="btn-icon"
           onClick={toggleTheme}
